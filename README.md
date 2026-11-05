@@ -30,6 +30,12 @@ With Docker: `docker build -t mock-tive-sender . && docker run --env-file .env -
 | `POLL_TIMEOUT_S` | 60 | Stop polling a send after this many seconds |
 | `HISTORY_LIMIT` | 500 | Rows kept in the results table |
 
+## Tasks (just)
+
+Run `just` to list recipes: `dev` (port 8100, reads `.env`), `dev-against URL KEY`, `check`,
+`build` / `run` (Docker), `health [URL]`, `prod-health`, `deploy` (checks, then push `main`;
+Render auto-deploys), and `redeploy` (Render deploy hook).
+
 ## Tests and checks
 
 ```bash
