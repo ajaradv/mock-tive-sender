@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block banner %}
+<div id="api-banner" class="banner waking" hx-get="/api-status" hx-trigger="load, every 3s" hx-swap="outerHTML">API waking up&hellip;</div>
+{% endblock %}
+{% block content %}
+<form id="sender" hx-target="#results" hx-swap="outerHTML">
+  <label class="toggle"><input type="checkbox" name="idempotency" value="1"> Send an Idempotency-Key (a fresh UUID) with each request</label>
+
+  <div class="panels">
+    <section class="panel">
+      <h2>Samples</h2>
+      <button type="button" hx-post="/send/samples">Send all {{ samples | length }}</button>
+      <ul class="samples">
+        {% for s in samples %}
+        <li><button type="button" hx-post="/send/sample/{{ s.index }}">Send</button>
+          <span><strong>{{ s.index }}. {{ s.name }}</strong><br><span class="muted">{{ s.description }}</span></span></li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Generator</h2>
+      <label>Count (max {{ max_generated }}) <input type="number" name="count" value="10" min="0" max="{{ max_generated }}"></label>
+      <label>Devices <input type="number" name="devices" value="2" min="1"></label>
+      <label>Seed <input type="number" name="seed" value="1"></label>
+      <label>Mutation rate <input type="number" name="rate" value="0.3" min="0" max="1" step="0.05"></label>
+      <fieldset>
+        <legend>Edge cases to mix in</legend>
+        {% for m in mutations %}
+        <label class="check"><input type="checkbox" name="mutations" value="{{ m.name }}"> {{ m.label }}</label>
+        {% endfor %}
+      </fieldset>
+      <button type="button" hx-post="/send/generated">Generate and send</button>
+    </section>
+
+    <section class="panel">
+      <h2>Demo cases</h2>
+      <ul class="samples">
+        {% for key, info in demo_cases.items() %}
+        <li><button type="button" hx-post="/send/demo/{{ key }}">{{ info[0] }}</button>
+          <span class="muted">{{ info[1] }}</span></li>
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
+</form>
+
+{% include "partials/results_table.html" %}
+{% endblock %}

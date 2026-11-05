@@ -1,0 +1,30 @@
+<div id="results"{% if interval %} hx-get="/results" hx-trigger="every {{ interval }}s" hx-swap="outerHTML"{% endif %}>
+  <h2>Results <small>{{ records | length }} sends{% if interval %} &middot; polling every {{ interval }}s{% endif %}</small></h2>
+  {% if not records %}
+  <p class="muted">Nothing sent yet.</p>
+  {% else %}
+  <table>
+    <thead>
+      <tr><th>Time</th><th>Payload</th><th>HTTP</th><th>Ingestion</th><th>Status</th><th>Issues</th><th>Records</th></tr>
+    </thead>
+    <tbody>
+    {% for r in records %}
+      <tr>
+        <td>{{ r.sent_at | int | timestamp }}</td>
+        <td>{{ r.label }}</td>
+        <td>{% if r.http_status %}<span class="chip http-{{ r.http_status // 100 }}xx">{{ r.http_status }}</span>{% else %}<span class="chip http-err">error</span>{% endif %}
+          {% if r.detail %}<div class="muted">{{ r.detail }}</div>{% endif %}
+          {% if r.error %}<div class="muted">{{ r.error }}</div>{% endif %}</td>
+        <td class="mono">{{ r.ingestion_id or "-" }}</td>
+        <td>{% if r.final_status %}<span class="chip st-{{ r.final_status }}">{{ r.final_status }}</span>
+          {% if not r.is_final and (now - r.sent_at) >= poll_timeout_s %}<div class="muted">no longer polling</div>{% endif %}
+          {% else %}-{% endif %}</td>
+        <td>{% for i in r.issues %}<span class="chip sev-{{ i.severity }}" title="{{ i.message }}">{{ i.code }}</span> {% endfor %}</td>
+        <td>{% if r.readings %}<details><summary>{{ r.readings | length }} record(s)</summary><pre>{{ r.readings | tojson(indent=2) }}</pre></details>{% else %}-{% endif %}
+          {% if r.issues %}<details><summary>issues</summary><pre>{{ r.issues | tojson(indent=2) }}</pre></details>{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>

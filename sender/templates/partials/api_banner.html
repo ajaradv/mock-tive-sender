@@ -1,0 +1,5 @@
+{% if up %}
+<div id="api-banner" class="banner up">API ready</div>
+{% else %}
+<div id="api-banner" class="banner waking" hx-get="/api-status" hx-trigger="load, every 3s" hx-swap="outerHTML">API waking up&hellip;</div>
+{% endif %}

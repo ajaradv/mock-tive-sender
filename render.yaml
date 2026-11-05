@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: paxafe-mock-tive-sender
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: INTEGRATION_API_URL
+        sync: false
+      - key: INTEGRATION_API_KEY
+        sync: false
