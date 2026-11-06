@@ -16,7 +16,7 @@ default:
 
 [private]
 need var:
-    @test -n "${{var}}" || { echo "{{var}} is not set; add it to .env" >&2; exit 1; }
+    @[ -n "$(printenv {{var}})" ] || { echo "{{var}} is not set; add it to .env" >&2; exit 1; }
 
 # Install dependencies into .venv
 setup:
