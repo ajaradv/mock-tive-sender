@@ -4,7 +4,7 @@ A small FastAPI + Jinja + HTMX app that produces Tive-shaped webhook payloads, s
 the PAXAFE Integration API, and shows how each one was handled: HTTP status, ingestion ID,
 final status, issues and corrections, and the stored or candidate PX records.
 
-Live URL: _fill in after deploying to Render_ (the first load wakes the free instance, and the
+Live URL: https://paxafe-mock-tive-sender.onrender.com (the first load wakes the free instance, and the
 page banner shows "API waking up..." until the Integration API's `/livez` returns 200).
 
 The API key and URL live only in the server's environment. They are never rendered into a page.
